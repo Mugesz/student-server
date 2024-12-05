@@ -2,6 +2,22 @@ const express = require("express");
 const router = express.Router();
 const db = require("../DB/connection"); // Import the database connection
 
+
+// GET all students
+router.get("/", async (req, res) => {
+  try {
+    db.query("SELECT * FROM studentDetails", (err, results) => {
+      if (err) {
+        throw new Error("Database query failed."); // Throw an error to be caught by the catch block
+      }
+      res.json(results); // Send the retrieved data as JSON
+    });
+  } catch (error) {
+    console.error("Error fetching students:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // POST route to create a student
 router.post("/create-students", async (req, res) => {
   const {
